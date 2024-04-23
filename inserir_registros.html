@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/recuperar-tabelas" method="post">
+        <div>
+            <label for="banco">Banco de Dados:</label>
+            <select id="banco" name="banco" required></select>
+            <input type="submit" value="Consultar tabelas" onsubmit="buscarTabelas">
+        </div>
+    </form>
+    <form action="">
+        <div>
+            <label for="tabelas">Tabelas:</label>
+            <select name="tabelas" id="tabelas"></select>
+        </div>
+
+    </form>
+        <script>
+            window.onload = function() {
+                const bancoSelect = document.getElementById('banco');
+
+                fetch('http://localhost:3000/recuperar-bancos')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(dbName => {
+                        const option = document.createElement('option');
+                        option.value = dbName;
+                        option.textContent = dbName;
+                        bancoSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
+            }
+            function buscarTabelas(){
+                const tabelaSelect = document.getElementById('tabelas')
+
+                fetch('http://localhost:3000/recuperar-tabelas')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(tbName => {
+                        const option = document.createElement('option')
+                        option.value = tbName
+                        option.textContent = tbName
+                        tabelaSelect.appendChild(option)
+                    })
+                })
+                .catch(error => console.error('Erro ao obter tabelas:',error))
+            }
+        </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Tabela</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-container button {
+            width: 48%;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Criar Tabela</h1>
+    <form id="createForm" action="/criar-tabela/tabela-criada" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="nomeTabela">Nome da Tabela:</label>
+            <input type="text" id="nomeTabela" name="nomeTabela" required>
+        </div>
+
+        <div>
+            <label for="banco">Banco de Dados:</label>
+            <select id="banco" name="banco" required></select>
+        </div>
+        <hr>
+        <div id="columns">
+            <div class="column">
+                <label for="nomeColuna1">Nome da Coluna:</label>
+                <input type="text" id="nomeColuna1" name="nomeColuna1" required>
+
+                <label for="tipoColuna1">Tipo da Coluna:</label>
+                <select id="tipoColuna1" name="tipoColuna1" required>
+                    <option value="">Selecione o tipo</option>
+                    <option value="int">INT</option>
+                    <option value="varchar">VARCHAR</option>
+                    <option value="date">DATE</option>
+                    <!-- Adicione mais opções conforme necessário -->
+                </select>
+
+                <label for="tamanhoColuna1">Tamanho da Coluna:</label>
+                <input type="number" id="tamanhoColuna1" name="tamanhoColuna1" required max="255">
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button type="button" id="addColumn">Adicionar Coluna</button>
+            <button type="button" id="removeColumn">Remover Coluna</button>
+        </div>
+
+        <input type="submit" value="Criar Tabela">
+    </form>
+
+    <script>
+        window.onload = function() {
+            const bancoSelect = document.getElementById('banco');
+            const createForm = document.getElementById('createForm');
+
+            // Faz uma solicitação ao servidor Node.js para obter a lista de bancos de dados
+            fetch('http://localhost:3000/recuperar-bancos')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(dbName => {
+                        const option = document.createElement('option');
+                        option.value = dbName;
+                        option.textContent = dbName;
+                        bancoSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
+
+            document.getElementById('addColumn').addEventListener('click', function() {
+                const columnsContainer = document.getElementById('columns');
+                const columnsCount = columnsContainer.children.length;
+
+                const newColumn = document.createElement('div');
+                newColumn.classList.add('column');
+                newColumn.innerHTML = `
+                    <label for="nomeColuna${columnsCount + 1}">Nome da Coluna:</label>
+                    <input type="text" id="nomeColuna${columnsCount + 1}" name="nomeColuna${columnsCount + 1}" required>
+
+                    <label for="tipoColuna${columnsCount + 1}">Tipo da Coluna:</label>
+                    <select id="tipoColuna${columnsCount + 1}" name="tipoColuna${columnsCount + 1}" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="int">INT</option>
+                        <option value="varchar">VARCHAR</option>
+                        <option value="date">DATE</option>
+                        <!-- Adicione mais opções conforme necessário -->
+                    </select>
+
+                    <label for="tamanhoColuna${columnsCount + 1}">Tamanho da Coluna:</label>
+                    <input type="number" id="tamanhoColuna${columnsCount + 1}" name="tamanhoColuna${columnsCount + 1}" required max="255">
+                `;
+                columnsContainer.appendChild(newColumn);
+            });
+
+            document.getElementById('removeColumn').addEventListener('click', function() {
+                const columnsContainer = document.getElementById('columns');
+                const columnsCount = columnsContainer.children.length;
+
+                // Garante que haja pelo menos uma coluna
+                if (columnsCount > 1) {
+                    columnsContainer.removeChild(columnsContainer.lastElementChild);
+                }
+            });
+        };
+    </script>
+</body>
+</html>

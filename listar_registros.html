@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        <div>
+            <label for="banco">Banco de Dados:</label>
+            <select id="banco" name="banco" required></select>
+        </div>
+        <script>
+            window.onload = function() {
+                const bancoSelect = document.getElementById('banco');
+
+                fetch('http://localhost:3000/recuperar-bancos')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(dbName => {
+                        const option = document.createElement('option');
+                        option.value = dbName;
+                        option.textContent = dbName;
+                        bancoSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
+            }
+        </script>
+    </form>
+</body>
+</html>

@@ -8,99 +8,109 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f2f2f2;
         }
-        
-        fieldset{
-                width: fit-content;
-                block-size: fit-content;
-            }
-        div{
-            display: grid;
-            place-items: center;
+        fieldset {
+            width: fit-content;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        div {
+            display: flex;
+            justify-content: center;
         }
         h1 {
             text-align: center;
+            margin-bottom: 20px;
         }
         form {
             max-width: 500px;
-            margin: 0 auto;
+            width: 100%;
         }
         label {
             display: block;
             margin-bottom: 5px;
+            color: #333;
         }
         input[type="text"],
         input[type="number"],
         select {
-            width: 200px;
+            width: 100%;
             padding: 8px;
             margin-bottom: 10px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #columns {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-row-gap: 10px;
         }
         .button-container {
             display: flex;
             justify-content: space-between;
+            margin-top: 10px;
         }
-        .button-container button {
+        .button-container button,
+        input[type="submit"] {
             width: 48%;
             padding: 10px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]{
+            margin-top: 10px;
+            width: 100%;
+        }
+        .button-container button:hover,
+        input[type="submit"]:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
     <h1>Criar Tabela</h1>
     <div>
-    <fieldset>
-        <legend>Criar Tabela</legend>
-        <form id="createForm" action="/criar-tabela/tabela-criada" method="post" enctype="multipart/form-data">
-            <div>
-                <label for="nomeTabela">Nome da Tabela:</label>
-                <input type="text" id="nomeTabela" name="nomeTabela" required>
-            </div>
-    
-            <div>
-                <label for="banco">Banco de Dados:</label>
-                <select id="banco" name="banco" required></select>
-            </div>
-            <hr>
-            <div id="columns">
-                <div class="column">
-                    <label for="nomeColuna1">Nome da Coluna:</label>
-                    <input type="text" id="nomeColuna1" name="nomeColuna1" required>
-    
-                    <label for="tipoColuna1">Tipo da Coluna:</label>
-                    <select id="tipoColuna1" name="tipoColuna1" required>
-                        <option value="">Selecione o tipo</option>
-                        <option value="int">INT</option>
-                        <option value="varchar">VARCHAR</option>
-                        <option value="date">DATE</option>
-                        <!-- Adicione mais opções conforme necessário -->
-                    </select>
-    
-                    <label for="tamanhoColuna1">Tamanho da Coluna:</label>
-                    <input type="number" id="tamanhoColuna1" name="tamanhoColuna1" required max="255">
+        <fieldset>
+            <legend>Criar Tabela</legend>
+            <form id="createForm" action="/criar-tabela/tabela-criada" method="post" enctype="multipart/form-data">
+                <div>
+                    <label for="banco">Banco de Dados:</label>
+                    <select id="banco" name="banco" required></select>
                 </div>
-            </div>
+                <div>
+                    <label for="nomeTabela">Nome da Tabela:</label>
+                    <input type="text" id="nomeTabela" name="nomeTabela" required>
+                </div>
     
-            <div class="button-container">
-                <button type="button" id="addColumn">Adicionar Coluna</button>
-                <button type="button" id="removeColumn">Remover Coluna</button>
-                
-            </div>
-            <input type="submit" value="Criar Tabela">
-            
-        </form>
+                <hr>
+                <div id="columns">
+                    <!-- Container de colunas -->
+                </div>
     
-    </fieldset>
-
+                <div class="button-container">
+                    <button type="button" id="addColumn">Adicionar Coluna</button>
+                    <button type="button" id="removeColumn">Remover Coluna</button>
+                </div>
+                <input type="submit" value="Criar Tabela">
+            </form>
+        </fieldset>
     </div>
-    
     
     <script>
         window.onload = function() {
             const bancoSelect = document.getElementById('banco');
             const createForm = document.getElementById('createForm');
+            const columnsContainer = document.getElementById('columns');
 
             // Faz uma solicitação ao servidor Node.js para obter a lista de bancos de dados
             fetch('http://localhost:3000/recuperar-bancos')
@@ -116,38 +126,35 @@
                 .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
 
             document.getElementById('addColumn').addEventListener('click', function() {
-                const columnsContainer = document.getElementById('columns');
-                const columnsCount = columnsContainer.children.length;
-                const newColumn = document.createElement('div');
-                newColumn.classList.add('column');
-                newColumn.innerHTML = `
-                    <label for="nomeColuna${columnsCount + 1}">Nome da Coluna:</label>
-                    <input type="text" id="nomeColuna${columnsCount + 1}" name="nomeColuna${columnsCount + 1}" required>
-
-                    <label for="tipoColuna${columnsCount + 1}">Tipo da Coluna:</label>
-                    <select id="tipoColuna${columnsCount + 1}" name="tipoColuna${columnsCount + 1}" required>
+                const columnsCount = columnsContainer.children.length + 1;
+                const newColumnContainer = document.createElement('div');
+                newColumnContainer.classList.add('column-container');
+                newColumnContainer.innerHTML = `
+                    <label for="nomeColuna${columnsCount}">Nome da Coluna:</label>
+                    <input type="text" id="nomeColuna${columnsCount}" name="nomeColuna${columnsCount}" required>
+    
+                    <label for="tipoColuna${columnsCount}">Tipo da Coluna:</label>
+                    <select id="tipoColuna${columnsCount}" name="tipoColuna${columnsCount}" required>
                         <option value="">Selecione o tipo</option>
                         <option value="int">INT</option>
                         <option value="varchar">VARCHAR</option>
                         <option value="date">DATE</option>
                         <!-- Adicione mais opções conforme necessário -->
                     </select>
-
-                    <label for="tamanhoColuna${columnsCount + 1}">Tamanho da Coluna:</label>
-                    <input type="number" id="tamanhoColuna${columnsCount + 1}" name="tamanhoColuna${columnsCount + 1}" required max="255">
+    
+                    <label for="tamanhoColuna${columnsCount}">Tamanho da Coluna:</label>
+                    <input type="number" id="tamanhoColuna${columnsCount}" name="tamanhoColuna${columnsCount}" required max="255">
                 `;
                 
-                columnsContainer.appendChild(newColumn);
+                columnsContainer.appendChild(newColumnContainer);
             });
 
             document.getElementById('removeColumn').addEventListener('click', function() {
-                const columnsContainer = document.getElementById('columns');
                 const columnsCount = columnsContainer.children.length;
 
                 // Garante que haja pelo menos uma coluna
                 if (columnsCount > 1) {
                     columnsContainer.removeChild(columnsContainer.lastElementChild);
-                    
                 }
             });
         };

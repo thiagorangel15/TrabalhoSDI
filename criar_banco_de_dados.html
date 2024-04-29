@@ -1,38 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Criação de BD</title>
-        <style>
-            div{
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-            fieldset{
-                width: fit-content;
-                block-size: fit-content;
-            }
-        </style>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de BD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        fieldset {
+            width: fit-content;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
 
-    <body>
-        <div>
-            <h1>Criação de BD</h1>
+<body>
+    <div>
+        <h1>Criação de BD</h1>
 
-            <form action="criar-banco-de-dados/banco" method="post" enctype="multipart/form-data">
-                <fieldset>
-                    <legend>Novo Banco de Dados</legend>
+        <form action="criar-banco-de-dados/banco" method="post" enctype="multipart/form-data">
+            <fieldset>
+                <legend>Novo Banco de Dados</legend>
 
-                    <p><label for="nome">Nome do BD:</label><br>
-                        <input type="text" id="nome" name="nome" size="30" autofocus>
-                    </p>
+                <p><label for="nome">Nome do BD:</label><br>
+                    <input type="text" id="nome" name="nome" size="30" autofocus>
+                </p>
 
-                    <p><input type="submit" value="Criar Banco de Dados"></p>
-                </fieldset>
-            </form>
-        </div>
-    </body>
+                <p><input type="submit" value="Criar Banco de Dados"></p>
+            </fieldset>
+        </form>
+    </div>
+</body>
 </html>

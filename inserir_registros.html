@@ -5,25 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserir Registros</title>
     <style>
-         fieldset{
-                width: fit-content;
-                block-size: fit-content;
-            }
-        #main-div{
-            display: grid;
-            place-items: center;
-        }
-        #form3{
-            display: grid;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
         }
         h1 {
             text-align: center;
+            color: #333;
+        }
+        #main-div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        fieldset {
+            width: fit-content;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        form div {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        select, input[type="submit"], input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"]{
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+        .labelColunas {
+            font-weight: bold;
+        }
+        #form3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .colunas {
+            width: calc(100% - 10px);
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
-    <h1>Inserir Registros na Tabela</h1>
     <div id="main-div">
+        <h1>Inserir Registros na Tabela</h1>
         <fieldset>
             <legend>Inserir Registros</legend>
             <form id="form1" method="POST">
@@ -47,27 +117,25 @@
             </form>
         </fieldset>
     </div>
-    
-    
 
-        <script>
-            window.onload = function() {
-                const bancoSelect = document.getElementById('banco');
+    <script>
+        window.onload = function() {
+            const bancoSelect = document.getElementById('banco');
 
-                fetch('http://localhost:3000/recuperar-bancos')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(dbName => {
-                        const option = document.createElement('option');
-                        option.value = dbName;
-                        option.textContent = dbName;
-                        bancoSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
-            }
+            fetch('http://localhost:3000/recuperar-bancos')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(dbName => {
+                    const option = document.createElement('option');
+                    option.value = dbName;
+                    option.textContent = dbName;
+                    bancoSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
+        }
 
-           document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('form1').addEventListener('submit', (event) => {
                 event.preventDefault()
 
@@ -187,9 +255,7 @@
                     console.error('Erro ao enviar solicitação:', error)
                 })
             })
-            
         })
-        
-        </script>
+    </script>
 </body>
 </html>

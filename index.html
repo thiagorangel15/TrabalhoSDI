@@ -5,21 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal</title>
     <style>
-        fieldset{
-                width: fit-content;
-                block-size: fit-content;
-            }
-        #main-div{
-            display: grid;
-            place-items: center;
-            
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        #main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #options-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
+            color: #333;
+        }
+        fieldset {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
         }
         button {
-            display: inline-block;
+            display: block;
+            width: 100%;
             padding: 10px 20px;
+            margin-bottom: 10px;
             font-size: 16px;
             font-weight: bold;
             text-align: center;
@@ -33,24 +54,23 @@
             background-color: #3498db;
             color: #fff;
         }
-
         .primary-button:hover {
             background-color: #2980b9;
         }
     </style>
 </head>
 <body>
-    <h1>Bem-vindo à Página Principal</h1>
-    <div id="main-div">
-        <fieldset>
-            <legend>Escolha uma opção</legend>
-            <button class="primary-button" onclick="window.location.href = '/criar-banco-de-dados'">Criar Banco de Dados</button>
-            <button class="primary-button" onclick="window.location.href = '/criar-tabela'">Criar Tabela</button>
-            <button class="primary-button" onclick="window.location.href = '/inserir-registros'">Inserir Registros</button>
-            <button class="primary-button" onclick="window.location.href = '/listar-registros'">Listar Registros</button>
-        </fieldset>
+    <div id="main-container">
+        <div id="options-container">
+            <h1>Bem-vindo à Página Principal</h1>
+            <fieldset>
+                <legend>Escolha uma opção</legend>
+                <button class="primary-button" onclick="window.location.href = '/criar-banco-de-dados'">Criar Banco de Dados</button>
+                <button class="primary-button" onclick="window.location.href = '/criar-tabela'">Criar Tabela</button>
+                <button class="primary-button" onclick="window.location.href = '/inserir-registros'">Inserir Registros</button>
+                <button class="primary-button" onclick="window.location.href = '/listar-registros'">Listar Registros</button>
+            </fieldset>
+        </div>
     </div>
-    
-    
 </body>
 </html>

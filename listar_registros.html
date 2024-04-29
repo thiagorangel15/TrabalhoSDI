@@ -17,27 +17,45 @@
         th {
           background-color: #f2f2f2;
         }
+        fieldset{
+                width: fit-content;
+                block-size: fit-content;
+            }
+        #main-div{
+            display: grid;
+            place-items: center;
+        }
+        h1 {
+            text-align: center;
+        }
       </style>
 </head>
 <body>
-    <form id="form1" method="POST">
-        <div>
-            <label for="banco">Banco de Dados:</label>
-            <select id="banco" name="banco" required></select>
-            <input type="submit" value="Consultar tabelas">
-        </div>
-    </form>
-    <hr>
-    <form id="form2" method="POST">
-        <div>
-            <label for="tabelas">Tabelas:</label>
-            <select name="tabelas" id="tabelas"></select>
-            <input type="submit" value="Selecionar Tabela">
-        </div>
-    </form>
-    <hr>
-
-   <div id="tabela"></div>
+    <h1>Listar Registros da Tabela</h1>
+    <div id="main-div">
+        <fieldset>
+            <legend>Listar Registros</legend>
+            <form id="form1" method="POST">
+                <div>
+                    <label for="banco">Banco de Dados:</label>
+                    <select id="banco" name="banco" required></select>
+                    <input type="submit" value="Consultar tabelas">
+                </div>
+            </form>
+            <hr>
+            <form id="form2" method="POST">
+                <div>
+                    <label for="tabelas">Tabelas:</label>
+                    <select name="tabelas" id="tabelas"></select>
+                    <input type="submit" value="Selecionar Tabela">
+                </div>
+            </form>
+            <hr>
+        
+           <div id="tabela"></div>
+        </fieldset>
+    </div>
+    
     
 
         <script>

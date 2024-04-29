@@ -9,6 +9,15 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        
+        fieldset{
+                width: fit-content;
+                block-size: fit-content;
+            }
+        div{
+            display: grid;
+            place-items: center;
+        }
         h1 {
             text-align: center;
         }
@@ -23,7 +32,7 @@
         input[type="text"],
         input[type="number"],
         select {
-            width: 100%;
+            width: 200px;
             padding: 8px;
             margin-bottom: 10px;
             box-sizing: border-box;
@@ -41,44 +50,53 @@
 </head>
 <body>
     <h1>Criar Tabela</h1>
-    <form id="createForm" action="/criar-tabela/tabela-criada" method="post" enctype="multipart/form-data">
-        <div>
-            <label for="nomeTabela">Nome da Tabela:</label>
-            <input type="text" id="nomeTabela" name="nomeTabela" required>
-        </div>
-
-        <div>
-            <label for="banco">Banco de Dados:</label>
-            <select id="banco" name="banco" required></select>
-        </div>
-        <hr>
-        <div id="columns">
-            <div class="column">
-                <label for="nomeColuna1">Nome da Coluna:</label>
-                <input type="text" id="nomeColuna1" name="nomeColuna1" required>
-
-                <label for="tipoColuna1">Tipo da Coluna:</label>
-                <select id="tipoColuna1" name="tipoColuna1" required>
-                    <option value="">Selecione o tipo</option>
-                    <option value="int">INT</option>
-                    <option value="varchar">VARCHAR</option>
-                    <option value="date">DATE</option>
-                    <!-- Adicione mais opções conforme necessário -->
-                </select>
-
-                <label for="tamanhoColuna1">Tamanho da Coluna:</label>
-                <input type="number" id="tamanhoColuna1" name="tamanhoColuna1" required max="255">
+    <div>
+    <fieldset>
+        <legend>Criar Tabela</legend>
+        <form id="createForm" action="/criar-tabela/tabela-criada" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="nomeTabela">Nome da Tabela:</label>
+                <input type="text" id="nomeTabela" name="nomeTabela" required>
             </div>
-        </div>
+    
+            <div>
+                <label for="banco">Banco de Dados:</label>
+                <select id="banco" name="banco" required></select>
+            </div>
+            <hr>
+            <div id="columns">
+                <div class="column">
+                    <label for="nomeColuna1">Nome da Coluna:</label>
+                    <input type="text" id="nomeColuna1" name="nomeColuna1" required>
+    
+                    <label for="tipoColuna1">Tipo da Coluna:</label>
+                    <select id="tipoColuna1" name="tipoColuna1" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="int">INT</option>
+                        <option value="varchar">VARCHAR</option>
+                        <option value="date">DATE</option>
+                        <!-- Adicione mais opções conforme necessário -->
+                    </select>
+    
+                    <label for="tamanhoColuna1">Tamanho da Coluna:</label>
+                    <input type="number" id="tamanhoColuna1" name="tamanhoColuna1" required max="255">
+                </div>
+            </div>
+    
+            <div class="button-container">
+                <button type="button" id="addColumn">Adicionar Coluna</button>
+                <button type="button" id="removeColumn">Remover Coluna</button>
+                
+            </div>
+            <input type="submit" value="Criar Tabela">
+            
+        </form>
+    
+    </fieldset>
 
-        <div class="button-container">
-            <button type="button" id="addColumn">Adicionar Coluna</button>
-            <button type="button" id="removeColumn">Remover Coluna</button>
-        </div>
-
-        <input type="submit" value="Criar Tabela">
-    </form>
-
+    </div>
+    
+    
     <script>
         window.onload = function() {
             const bancoSelect = document.getElementById('banco');
@@ -100,7 +118,6 @@
             document.getElementById('addColumn').addEventListener('click', function() {
                 const columnsContainer = document.getElementById('columns');
                 const columnsCount = columnsContainer.children.length;
-
                 const newColumn = document.createElement('div');
                 newColumn.classList.add('column');
                 newColumn.innerHTML = `
@@ -119,6 +136,7 @@
                     <label for="tamanhoColuna${columnsCount + 1}">Tamanho da Coluna:</label>
                     <input type="number" id="tamanhoColuna${columnsCount + 1}" name="tamanhoColuna${columnsCount + 1}" required max="255">
                 `;
+                
                 columnsContainer.appendChild(newColumn);
             });
 
@@ -129,6 +147,7 @@
                 // Garante que haja pelo menos uma coluna
                 if (columnsCount > 1) {
                     columnsContainer.removeChild(columnsContainer.lastElementChild);
+                    
                 }
             });
         };

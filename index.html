@@ -4,13 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal</title>
+    <style>
+        fieldset{
+                width: fit-content;
+                block-size: fit-content;
+            }
+        #main-div{
+            display: grid;
+            place-items: center;
+            
+        }
+        h1 {
+            text-align: center;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .primary-button {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .primary-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
     <h1>Bem-vindo à Página Principal</h1>
-    <p>Escolha uma opção abaixo:</p>
-    <button onclick="window.location.href = '/criar-banco-de-dados'">Criar Banco de Dados</button>
-    <button onclick="window.location.href = '/criar-tabela'">Criar Tabela</button>
-    <button onclick="window.location.href = '/inserir-registros'">Inserir Registros</button>
-    <button onclick="window.location.href = '/listar-registros'">Listar Registros</button>
+    <div id="main-div">
+        <fieldset>
+            <legend>Escolha uma opção</legend>
+            <button class="primary-button" onclick="window.location.href = '/criar-banco-de-dados'">Criar Banco de Dados</button>
+            <button class="primary-button" onclick="window.location.href = '/criar-tabela'">Criar Tabela</button>
+            <button class="primary-button" onclick="window.location.href = '/inserir-registros'">Inserir Registros</button>
+            <button class="primary-button" onclick="window.location.href = '/listar-registros'">Listar Registros</button>
+        </fieldset>
+    </div>
+    
+    
 </body>
 </html>

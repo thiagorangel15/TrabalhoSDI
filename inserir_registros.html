@@ -4,27 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserir Registros</title>
+    <style>
+         fieldset{
+                width: fit-content;
+                block-size: fit-content;
+            }
+        #main-div{
+            display: grid;
+            place-items: center;
+        }
+        #form3{
+            display: grid;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <form id="form1" method="POST">
-        <div>
-            <label for="banco">Banco de Dados:</label>
-            <select id="banco" name="banco" required></select>
-            <input type="submit" value="Consultar tabelas">
-        </div>
-    </form>
-    <hr>
-    <form id="form2" method="POST">
-        <div>
-            <label for="tabelas">Tabelas:</label>
-            <select name="tabelas" id="tabelas"></select>
-            <input type="submit" value="Selecionar Tabela">
-        </div>
-    </form>
-    <hr>
-
-    <form id="form3" method="POST">
-    </form>
+    <h1>Inserir Registros na Tabela</h1>
+    <div id="main-div">
+        <fieldset>
+            <legend>Inserir Registros</legend>
+            <form id="form1" method="POST">
+                <div>
+                    <label for="banco">Banco de Dados:</label>
+                    <select id="banco" name="banco" required></select>
+                    <input type="submit" value="Consultar tabelas">
+                </div>
+            </form>
+            <hr>
+            <form id="form2" method="POST">
+                <div>
+                    <label for="tabelas">Tabelas:</label>
+                    <select name="tabelas" id="tabelas"></select>
+                    <input type="submit" value="Selecionar Tabela">
+                </div>
+            </form>
+            <hr>
+        
+            <form id="form3" method="POST">
+            </form>
+        </fieldset>
+    </div>
+    
     
 
         <script>
@@ -99,6 +122,7 @@
                 .then(response => response.json())
                 .then(data => {
                     let form3 = document.getElementById('form3')
+                    form3.innerHTML = ''
                     console.log(data)
                     const regex = /\((\d+)\)/
                     function capitalizarString(string){

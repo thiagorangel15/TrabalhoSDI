@@ -9,7 +9,7 @@ Necessário ter o [XAMPP](https://www.apachefriends.org/pt_br/index.html) na má
 Rodar o seguinte comando no terminal:
 
 ```bash
-npm install dependencies
+npm install
 ```
 
 ## Como rodar 

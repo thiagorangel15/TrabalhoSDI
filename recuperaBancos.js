@@ -6,7 +6,7 @@ const recuperarBancos = (res) => {
     connection.query(consulta,(err,results)=>{
         if (err) throw err
         const databases = results.map(result => result.Database)
-        console.log(databases)
+        
         res.writeHead(200, {'Content-Type': 'application/json'})
         res.end(JSON.stringify(databases))
     })

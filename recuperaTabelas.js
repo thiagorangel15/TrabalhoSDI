@@ -1,8 +1,8 @@
 const mysql = require('mysql')
-const formidable = require('formidable')
+
 
 let dbConfig = {
-    connectionLimit: 20,
+    connectionLimit: 100,
     host: 'localhost',
     user: 'root',
     password: '',
@@ -17,28 +17,34 @@ function conectarDB(database) {
 }
 
 const recuperarTabelas = (req,res) => {
-    const form = new formidable.IncomingForm()
-    form.parse(req, (err,fields) => {
-        if (err) throw err
-        let nomeBanco = fields.banco[0]
+    let data = ''
+    
+    req.on('data', chunk => {
+        data += chunk.toString()
+    })
+
+    req.on('end', () => {
+        const body = JSON.parse(data)
+        const nomeBanco = body.banco
         let connection = conectarDB(nomeBanco)
+        
         let query = 'SHOW TABLES'
-        connection.query(query, (err,results) => {
+        connection.query(query, (err,results) =>{
             if(err) throw err
-            //console.log(results)
             const nomePropriedade = Object.keys(results[0])[0]
             const tables = results.map(result => result[nomePropriedade])
-            console.log(tables)
+            
+
             res.writeHead(200, {'Content-Type': 'application/json'})
             res.end(JSON.stringify(tables))
-
         })
-
+        
     })
     
 }
 
 module.exports = recuperarTabelas
+
 
 
 

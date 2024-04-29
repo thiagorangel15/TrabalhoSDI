@@ -2,7 +2,7 @@ let mysql = require('mysql')
 
 let conexao = mysql.createPool(
     {
-        connectionLimit: 20,
+        connectionLimit: 100,
         host: 'localhost',
         user: 'root',
         password: ''

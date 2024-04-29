@@ -6,6 +6,8 @@ let criarBanco = require('./criarBanco')
 const recuperaBancos = require('./recuperaBancos')
 const criarTabela = require('./criarTabela')
 const recuperaTabelas = require('./recuperaTabelas')
+const recuperaColunas = require('./recuperaColunas')
+const inserirRegistro = require('./inserirRegistros')
 
 
 
@@ -48,6 +50,10 @@ const server = http.createServer((req, res) => {
         recuperaBancos(res)    
     } else if(req.url === '/recuperar-tabelas'){
         recuperaTabelas(req,res)
+    }else if(req.url === '/recuperar-colunas'){
+        recuperaColunas(req,res)
+    }else if(req.url === '/inserir-registros/registro-inserido'){
+        inserirRegistro(req,res)
     }
     else {
         res.writeHead(404, {'Content-Type': 'text/plain'});

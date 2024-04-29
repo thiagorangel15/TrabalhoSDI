@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Inserir Registros</title>
 </head>
 <body>
-    <form action="/recuperar-tabelas" method="post">
+    <form id="form1" method="POST">
         <div>
             <label for="banco">Banco de Dados:</label>
             <select id="banco" name="banco" required></select>
-            <input type="submit" value="Consultar tabelas" onsubmit="buscarTabelas">
+            <input type="submit" value="Consultar tabelas">
         </div>
     </form>
-    <form action="">
+    <hr>
+    <form id="form2" method="POST">
         <div>
             <label for="tabelas">Tabelas:</label>
             <select name="tabelas" id="tabelas"></select>
+            <input type="submit" value="Selecionar Tabela">
         </div>
-
     </form>
+    <hr>
+
+    <form id="form3" method="POST">
+    </form>
+    <iframe id="hiddenFrame" name = "hiddenFrame" style="display: none;"></iframe>
+
         <script>
             window.onload = function() {
                 const bancoSelect = document.getElementById('banco');
@@ -36,21 +43,129 @@
                 })
                 .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
             }
-            function buscarTabelas(){
-                const tabelaSelect = document.getElementById('tabelas')
 
-                fetch('http://localhost:3000/recuperar-tabelas')
+           document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('form1').addEventListener('submit', (event) => {
+                event.preventDefault()
+
+                var nomeBanco = document.getElementById('banco').value
+                
+                fetch('http://localhost:3000/recuperar-tabelas',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify({banco: nomeBanco})
+                })
                 .then(response => response.json())
                 .then(data => {
-                    data.forEach(tbName => {
-                        const option = document.createElement('option')
-                        option.value = tbName
-                        option.textContent = tbName
-                        tabelaSelect.appendChild(option)
+                    let selectElemento = document.getElementById('tabelas')
+                    selectElemento.innerHTML = ''
+
+                    data.forEach((tabela) => {
+                        var option = document.createElement('option')
+                        option.value = tabela
+                        option.textContent = tabela
+                        selectElemento.appendChild(option)
                     })
                 })
-                .catch(error => console.error('Erro ao obter tabelas:',error))
+                .catch(error => {
+                    console.error('Erro ao obter tabelas:', error)
+                })
+            })
+
+
+            function getType(tipo){
+                if (tipo.startsWith('int')){
+                    return 'number'
+                }else if (tipo.startsWith('varchar')){
+                    return 'text'
+                }else{
+                    return 'text'
+                }
             }
+
+            document.getElementById('form2').addEventListener('submit', (event) => {
+                event.preventDefault()
+                var nomeBanco = document.getElementById('banco').value
+                var nomeTabela = document.getElementById('tabelas').value
+                fetch('http://localhost:3000/recuperar-colunas', {
+                    method:'POST',
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    },
+                    body:JSON.stringify({banco:nomeBanco, tabela: nomeTabela})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let form3 = document.getElementById('form3')
+                    console.log(data)
+                    const regex = /\((\d+)\)/
+                    function capitalizarString(string){
+                        return string.charAt(0).toUpperCase() + string.slice(1)
+                    }
+                    data.forEach((campo, index) => {
+                        
+                        const tamanhoColuna = regex.exec(campo.tipoColuna)[1]
+                        const tituloColuna = capitalizarString(campo.nomeColuna)
+                        const label = document.createElement('label')
+                        label.textContent = `${tituloColuna} | Tamanho Máximo ${tamanhoColuna} :`
+                        label.className = 'labelColunas'
+
+                        const input = document.createElement('input')
+                        input.name = campo.nomeColuna
+                        input.type = getType(campo.tipoColuna)
+                        input.id = `coluna${index+1}`
+                        input.className = 'colunas'
+                        
+                        form3.appendChild(label)
+                        form3.appendChild(input)
+                    })
+
+                    const botaoSubmit = document.createElement('button')
+                    botaoSubmit.textContent = 'Inserir Registro'
+                    botaoSubmit.type = 'submit'
+
+                    form3.appendChild(botaoSubmit)
+                    
+                })
+
+            })
+            document.getElementById('form3').addEventListener('submit', (event) => {
+                event.preventDefault()
+               let form3 = document.getElementById('form3')
+                
+                const dados = {
+                    nomeBanco: document.getElementById('banco').value,
+                    nomeTabela: document.getElementById('tabelas').value,
+                    valoresInputs: {}
+                }
+
+                const inputs = form3.querySelectorAll('.colunas')
+                inputs.forEach(input => {
+                    dados.valoresInputs[input.name] = input.value
+                })
+                
+                console.log(JSON.stringify(dados))
+                fetch('http://localhost:3000/inserir-registros/registro-inserido', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    mensagem = data.message
+                    alert(`Query executada com sucesso: ${mensagem}`)
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar solicitação:', error)
+                })
+            })
+            
+        })
+        
         </script>
 </body>
 </html>

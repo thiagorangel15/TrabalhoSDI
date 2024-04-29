@@ -8,6 +8,7 @@ const criarTabela = require('./criarTabela')
 const recuperaTabelas = require('./recuperaTabelas')
 const recuperaColunas = require('./recuperaColunas')
 const inserirRegistro = require('./inserirRegistros')
+const recuperarRegistros = require('./recuperaRegistros')
 
 
 
@@ -54,6 +55,8 @@ const server = http.createServer((req, res) => {
         recuperaColunas(req,res)
     }else if(req.url === '/inserir-registros/registro-inserido'){
         inserirRegistro(req,res)
+    }else if(req.url === '/recuperar-registros'){
+        recuperarRegistros(req,res)
     }
     else {
         res.writeHead(404, {'Content-Type': 'text/plain'});

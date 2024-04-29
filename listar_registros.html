@@ -4,13 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listar Registros</title>
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+      </style>
 </head>
 <body>
-    <form action="" method="post">
+    <form id="form1" method="POST">
         <div>
             <label for="banco">Banco de Dados:</label>
             <select id="banco" name="banco" required></select>
+            <input type="submit" value="Consultar tabelas">
         </div>
+    </form>
+    <hr>
+    <form id="form2" method="POST">
+        <div>
+            <label for="tabelas">Tabelas:</label>
+            <select name="tabelas" id="tabelas"></select>
+            <input type="submit" value="Selecionar Tabela">
+        </div>
+    </form>
+    <hr>
+
+   <div id="tabela"></div>
+    
+
         <script>
             window.onload = function() {
                 const bancoSelect = document.getElementById('banco');
@@ -27,7 +56,86 @@
                 })
                 .catch(error => console.error('Erro ao obter a lista de bancos de dados:', error));
             }
+
+           document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('form1').addEventListener('submit', (event) => {
+                event.preventDefault()
+
+                var nomeBanco = document.getElementById('banco').value
+                
+                fetch('http://localhost:3000/recuperar-tabelas',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify({banco: nomeBanco})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let selectElemento = document.getElementById('tabelas')
+                    selectElemento.innerHTML = ''
+
+                    data.forEach((tabela) => {
+                        var option = document.createElement('option')
+                        option.value = tabela
+                        option.textContent = tabela
+                        selectElemento.appendChild(option)
+                    })
+                })
+                .catch(error => {
+                    console.error('Erro ao obter tabelas:', error)
+                })
+            })
+
+
+            document.getElementById('form2').addEventListener('submit', (event) => {
+                event.preventDefault()
+                var nomeBanco = document.getElementById('banco').value
+                var nomeTabela = document.getElementById('tabelas').value
+                fetch('http://localhost:3000/recuperar-registros', {
+                    method:'POST',
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    },
+                    body:JSON.stringify({banco:nomeBanco, tabela: nomeTabela})
+                })
+                .then(response => response.json())
+                .then(data => {
+                   
+                    const colunas = data.colunas
+                    const registros = data.registros
+                    
+                    function criarTabela(titulos, registros){
+                        const tabela = document.createElement('table')
+                        const cabecalho = tabela.createTHead()
+                        const linhaCabecalho = cabecalho.insertRow()
+
+                        titulos.forEach(titulo => {
+                            const th = document.createElement('th')
+                            th.textContent = titulo
+                            linhaCabecalho.appendChild(th)
+                        })
+
+                        registros.forEach(registro => {
+                            const linha = tabela.insertRow()
+                            titulos.forEach(titulo =>{
+                                const td = linha.insertCell()
+                                td.textContent = registro[titulo]
+                            })
+                        })
+                        return tabela
+                    }
+                    const divTabela = document.getElementById('tabela')
+                    const tabelaHTML = criarTabela(colunas,registros)
+                    divTabela.innerHTML = ''
+                    divTabela.appendChild(tabelaHTML)
+                })
+
+            })
+            
+            
+        })
+        
         </script>
-    </form>
 </body>
 </html>
